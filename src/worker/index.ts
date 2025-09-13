@@ -9,6 +9,11 @@ import {
   UploadSalaryChartSchema,
 } from "@/shared/types";
 
+// Cloudflare Workers environment bindings
+interface Env {
+  DB: D1Database;
+}
+
 type Variables = {
   currentUser?: any;
 };
@@ -147,7 +152,7 @@ app.post("/api/admin/employees", adminMiddleware, zValidator('json', CreateUserS
   const passwordHash = await crypto.subtle.digest(
     'SHA-256', 
     new TextEncoder().encode(data.password)
-  ).then(hash => Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join(''));
+  ).then((hash: ArrayBuffer) => Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join(''));
 
   await c.env.DB.prepare(
     "INSERT INTO users (email, role, first_name, last_name, employee_id, login, password_hash, department, position, hire_date, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -544,7 +549,7 @@ app.post("/api/login", async (c) => {
   const passwordHash = await crypto.subtle.digest(
     'SHA-256', 
     new TextEncoder().encode(password)
-  ).then(hash => Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join(''));
+  ).then((hash: ArrayBuffer) => Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join(''));
 
   const { results } = await c.env.DB.prepare(
     "SELECT * FROM users WHERE login = ? AND password_hash = ? AND is_active = true"

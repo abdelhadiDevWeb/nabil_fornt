@@ -14,9 +14,10 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.9.6",
+    "@cloudflare/workers-types": "^4.20250913.0",
     "@eslint/js": "9.25.1",
-    "@getmocha/vite-plugins": "latest",
     "@getmocha/users-service": "^0.0.4",
+    "@getmocha/vite-plugins": "latest",
     "@types/node": "22.14.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
